@@ -1,6 +1,7 @@
 import 'package:amazon_clone/common/widgets/custom_button.dart';
 import 'package:amazon_clone/common/widgets/custom_textfield.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
+import 'package:amazon_clone/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 enum Auth {
@@ -9,7 +10,6 @@ enum Auth {
 }
 
 class AuthScreen extends StatefulWidget {
-  static const String routeName = '/auth-Screen';
   const AuthScreen({super.key});
 
   @override
@@ -21,6 +21,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final _signUpformKey = GlobalKey<FormState>();
   final _signInformKey = GlobalKey<FormState>();
 
+  final AuthService authService = AuthService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -92,7 +93,13 @@ class _AuthScreenState extends State<AuthScreen> {
                         CustomButton(
                           text: 'Sign Up',
                           onTap: () {
-                            _signUpformKey.currentState!.validate();
+                            if (_signUpformKey.currentState!.validate()) {
+                              authService.signUpUser(
+                                name: _nameController.text,
+                                email: _emailController.text,
+                                password: _passwordController.text, 
+                              );
+                            }
                           },
                         )
                       ],
