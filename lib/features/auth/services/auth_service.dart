@@ -1,9 +1,15 @@
+import 'dart:convert';
+
+import 'package:amazon_clone/provider/user_provider.dart';
+import 'package:amazon_clone/router.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:amazon_clone/constants/error_handling.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:amazon_clone/constants/utils.dart';
 import 'package:amazon_clone/models/user.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   // Sign up user
@@ -35,9 +41,82 @@ class AuthService {
         response: response,
         onSuccess: () {
           toastInfo('Account Created, Login with same details');
-        }, 
+        },
+      );
+    } catch (e) {
+      toastInfo(e.toString());
+    }
+  }
+
+  // Sign In user
+  void signInUser({
+    required context,
+    required email,
+    required password,
+  }) async {
+    try {
+      http.Response response = await http.post(
+        Uri.parse('$uri/amazon-api/signin'),
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+        headers: <String, String>{
+          'Content-type': 'application/json; charset=UTF-8',
+        },
       );
 
+      httpErrorHandle(
+        response: response,
+        onSuccess: () async {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          Provider.of<UserProvider>(context, listen: false)
+              .setUser(response.body);
+          await prefs.setString(
+              'auth_token', jsonDecode(response.body)['token']);
+          toastInfo('You are now signed in');
+          MyAppRouter.router.push('/dashboard');
+        },
+      );
+    } catch (e) {
+      toastInfo(e.toString());
+    }
+  }
+
+  //  Get userData
+  void getUserData(
+    context,
+  ) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('auth_token');
+
+      if (token == null) {
+        prefs.setString('auth_token', '');
+      }
+
+      var tokenRes = await http.post(
+        Uri.parse('$uri/tokenIsValid'),
+        headers: <String, String>{
+          'Content-type': 'application/json; charset=UTF-8',
+          'auth_token': token!,
+        },
+      );
+
+      var response = jsonDecode(tokenRes.body);
+
+      if (response == true) {
+        http.Response userRes = await http.get(
+          Uri.parse('$uri/'),
+          headers: <String, String>{
+            'Content-type': 'application/json; charset=UTF-8',
+            'auth_token': token,
+          },
+        );
+
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setUser(userRes.body);
+      }
     } catch (e) {
       toastInfo(e.toString());
     }

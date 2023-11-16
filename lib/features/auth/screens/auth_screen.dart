@@ -97,7 +97,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               authService.signUpUser(
                                 name: _nameController.text,
                                 email: _emailController.text,
-                                password: _passwordController.text, 
+                                password: _passwordController.text,
                               );
                             }
                           },
@@ -147,7 +147,13 @@ class _AuthScreenState extends State<AuthScreen> {
                         CustomButton(
                           text: 'Sign In',
                           onTap: () {
-                            _signInformKey.currentState!.validate();
+                            if (_signInformKey.currentState!.validate()) {
+                              authService.signInUser(
+                                context: context,
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                              );
+                            }
                           },
                         )
                       ],
