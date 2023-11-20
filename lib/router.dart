@@ -1,4 +1,7 @@
 import 'package:amazon_clone/common/widgets/bottom_bar.dart';
+import 'package:amazon_clone/features/account/screens/account_screen.dart';
+import 'package:amazon_clone/features/admin/screens/addProducts_screen.dart';
+import 'package:amazon_clone/features/admin/screens/admin_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:amazon_clone/provider/user_provider.dart';
@@ -23,12 +26,32 @@ class MyAppRouter {
             builder: (context, state) {
               return const BottomBar();
             },
+          ),
+          GoRoute(
+            path: 'account',
+            builder: (context, state) {
+              return const AccountScreen();
+            },
+          ),
+          GoRoute(
+            path: 'admin',
+            builder: (context, state) {
+              return const AdminScreen();
+            },
+          ),
+          GoRoute(
+            path: 'addProduct',
+            builder: (context, state) {
+              return const AddProductScreen();
+            },
           )
         ],
         path: '/',
         builder: (context, state) {
           return Provider.of<UserProvider>(context).user.token.isNotEmpty
-              ? const BottomBar()
+              ? Provider.of<UserProvider>(context).user.type == 'user'
+                  ? const BottomBar()
+                  : const AdminScreen()
               : const AuthScreen();
         },
       )
