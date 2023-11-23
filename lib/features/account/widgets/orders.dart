@@ -45,7 +45,7 @@ class _OrdersState extends State<Orders> {
         // Display Orders
         Container(
           height: 170,
-          padding: EdgeInsets.only(left: 10, top: 20, right: 0),
+          padding: const EdgeInsets.only(left: 10, top: 20, right: 0),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: list.length,

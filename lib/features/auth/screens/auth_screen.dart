@@ -3,20 +3,21 @@ import 'package:amazon_clone/common/widgets/custom_textfield.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:amazon_clone/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum Auth {
   signin,
   signup,
 }
 
-class AuthScreen extends StatefulWidget {
+class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _AuthScreenState extends ConsumerState<AuthScreen> {
   Auth _auth = Auth.signup;
   final _signUpformKey = GlobalKey<FormState>();
   final _signInformKey = GlobalKey<FormState>();
@@ -149,7 +150,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           onTap: () {
                             if (_signInformKey.currentState!.validate()) {
                               authService.signInUser(
-                                context: context,
+                                ref: ref,
                                 email: _emailController.text,
                                 password: _passwordController.text,
                               );

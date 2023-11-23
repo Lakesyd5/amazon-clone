@@ -1,25 +1,25 @@
 import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:amazon_clone/features/auth/services/auth_service.dart';
-import 'package:amazon_clone/provider/user_provider.dart';
 import 'package:amazon_clone/router.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => UserProvider()),
-  ],
-  child: const MainApp()));
+  runApp(
+    const ProviderScope(
+      child: MainApp(),
+    ),
+  );
 }
 
-class MainApp extends StatefulWidget {
+class MainApp extends ConsumerStatefulWidget {
   const MainApp({super.key});
 
   @override
-  State<MainApp> createState() => _MainAppState();
+  ConsumerState<MainApp> createState() => _MainAppState();
 }
 
-class _MainAppState extends State<MainApp> {
+class _MainAppState extends ConsumerState<MainApp> {
   final AuthService authService = AuthService();
 
   @override
@@ -30,6 +30,8 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    final router = ref.watch(routerProvider);
+    
     return MaterialApp.router(
       title: 'Amazon Clone',
       debugShowCheckedModeBanner: false,
@@ -42,7 +44,7 @@ class _MainAppState extends State<MainApp> {
           iconTheme: IconThemeData(color: Colors.black),
         ),
       ),
-      routerConfig: MyAppRouter.router,
+      routerConfig: router,
     );
   }
 }

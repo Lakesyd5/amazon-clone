@@ -1,14 +1,12 @@
 import 'dart:convert';
 
 import 'package:amazon_clone/provider/user_provider.dart';
-import 'package:amazon_clone/router.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:amazon_clone/constants/error_handling.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:amazon_clone/constants/utils.dart';
 import 'package:amazon_clone/models/user.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
@@ -50,7 +48,7 @@ class AuthService {
 
   // Sign In user
   void signInUser({
-    required context,
+    required ref,
     required email,
     required password,
   }) async {
@@ -70,12 +68,12 @@ class AuthService {
         response: response,
         onSuccess: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          Provider.of<UserProvider>(context, listen: false)
-              .setUser(response.body);
+          ref.read(userProvider.notifier).setUser(response.body);
           await prefs.setString(
-              'auth_token', jsonDecode(response.body)['token']);
+            'auth_token',
+            jsonDecode(response.body)['token'],
+          );
           toastInfo('You are now signed in');
-          MyAppRouter.router.push('/dashboard');
         },
       );
     } catch (e) {
@@ -85,7 +83,7 @@ class AuthService {
 
   //  Get userData
   void getUserData(
-    context,
+    ref,
   ) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -114,8 +112,7 @@ class AuthService {
           },
         );
 
-        var userProvider = Provider.of<UserProvider>(context, listen: false);
-        userProvider.setUser(userRes.body);
+        ref.read(userProvider.notifier).setUser(userRes.body);
       }
     } catch (e) {
       toastInfo(e.toString());

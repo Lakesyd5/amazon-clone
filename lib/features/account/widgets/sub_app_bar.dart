@@ -1,14 +1,14 @@
 import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:amazon_clone/provider/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SubAppBar extends StatelessWidget {
+class SubAppBar extends ConsumerWidget {
   const SubAppBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.read(userProvider);
     return Container(
       decoration: const BoxDecoration(
         gradient: GlobalVariables.appBarGradient,

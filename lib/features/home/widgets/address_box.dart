@@ -1,13 +1,13 @@
 import 'package:amazon_clone/provider/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddressBox extends StatelessWidget {
+class AddressBox extends ConsumerWidget {
   const AddressBox({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
     return Container(
       height: 40,
       decoration: const BoxDecoration(

@@ -1,23 +1,14 @@
 import 'package:amazon_clone/models/user.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UserProvider extends ChangeNotifier {
-  User _user = User(
-    id: '',
-    name: '',
-    email: '',
-    password: '',
-    address: '',
-    type: '',
-    token: '',
-  );
-
-  User get user => _user;
+class UserNotifier extends StateNotifier<User> {
+  UserNotifier() : super(User(id: '', name: '', email: '', password: '', address: '', type: '', token: ''));
 
   void setUser(String user) {
-    _user = User.fromJson(user);
-    notifyListeners();
+    state = User.fromJson(user);
   }
-
-  
 }
+
+final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
+  return UserNotifier();
+});
