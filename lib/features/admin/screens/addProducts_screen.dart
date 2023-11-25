@@ -8,15 +8,16 @@ import 'package:amazon_clone/features/admin/services/admin_services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddProductScreen extends StatefulWidget {
+class AddProductScreen extends ConsumerStatefulWidget {
   const AddProductScreen({super.key});
 
   @override
-  State<AddProductScreen> createState() => _AddProductScreenState();
+  ConsumerState<AddProductScreen> createState() => _AddProductScreenState();
 }
 
-class _AddProductScreenState extends State<AddProductScreen> {
+class _AddProductScreenState extends ConsumerState<AddProductScreen> {
   final TextEditingController productNameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
@@ -164,7 +165,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     if (_addProductKey.currentState!.validate() &&
                         images.isNotEmpty) {
                       adminServices.sellProduct(
-                        context: context,
+                        ref: ref,
                         name: productNameController.text,
                         description: descriptionController.text,
                         price: double.parse(priceController.text),

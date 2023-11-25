@@ -1,15 +1,15 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:amazon_clone/constants/error_handling.dart';
-import 'package:amazon_clone/constants/utils.dart';
 import 'package:amazon_clone/models/product.dart';
 import 'package:amazon_clone/provider/user_provider.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
 
 class HomeService {
    Future<List<Product>> fetchCategoryProducts({
-    ref,
+    required ref,
     required String category,
   }) async {
     final user = ref.watch(userProvider);
@@ -36,7 +36,9 @@ class HomeService {
         },
       );
     } catch (e) {
-      toastInfo( e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
     return productList;
   }
