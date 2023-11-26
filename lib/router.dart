@@ -1,3 +1,4 @@
+import 'package:amazon_clone/features/search/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:amazon_clone/common/widgets/bottom_bar.dart';
 import 'package:amazon_clone/features/account/screens/account_screen.dart';
@@ -54,6 +55,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) {
               return const CategoryDealsScreen();
             },
+          ),
+          GoRoute(
+            path: 'searchScreen',
+            builder: (context, state) {
+              return const SearchScreen();
+            },
           )
         ],
         path: '/',
@@ -68,67 +75,3 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
-
-
-// enum AppRoute { splash, login, home }
-
-// final routerProvider = Provider<GoRouter>((ref) {
-//   final user = ref.watch(userProvider);
-
-//   return GoRouter(
-//     /// Initial Routing Location
-//     initialLocation: '/',
-//     routes: [
-//       GoRoute(
-//         path: '/',
-//         builder: (context, state) {
-//           return const AuthScreen();
-//         },
-//       ),
-//       GoRoute(
-//         path: '/home',
-//         builder: (BuildContext context, GoRouterState state) {
-//           return const HomeScreen();
-//         },
-//       ),
-//       GoRoute(
-//         path: '/dashboard',
-//         builder: (context, state) {
-//           return const BottomBar();
-//         },
-//       ),
-//       GoRoute(
-//         path: '/account',
-//         builder: (context, state) {
-//           return const AccountScreen();
-//         },
-//       ),
-//       GoRoute(
-//         path: '/admin',
-//         builder: (context, state) {
-//           return const AdminScreen();
-//         },
-//       ),
-//       GoRoute(
-//         path: '/addProduct',
-//         builder: (context, state) {
-//           return const AddProductScreen();
-//         },
-//       ),
-//       GoRoute(
-//         path: '/categoryScreen',
-//         builder: (context, state) {
-//           return const CategoryDealsScreen();
-//         },
-//       )
-//     ],
-//     redirect: (context, state) {
-//       final userAuthentication = user;
-//       return userAuthentication.token.isNotEmpty
-//           ? userAuthentication.type == 'user'
-//               ? '/dashboard'
-//               : '/admin'
-//           : '/';
-//     },
-//   );
-// });

@@ -60,7 +60,7 @@ class _CategoryDealsScreenState extends ConsumerState<CategoryDealsScreen> {
                   child: GridView.builder(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.only(left: 15),
-                    itemCount: product!.length,
+                    itemCount: product.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 1,
