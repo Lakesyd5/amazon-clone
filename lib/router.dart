@@ -1,3 +1,4 @@
+import 'package:amazon_clone/features/product_details/screens/product_detail_screen.dart';
 import 'package:amazon_clone/features/search/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:amazon_clone/common/widgets/bottom_bar.dart';
@@ -61,7 +62,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) {
               return const SearchScreen();
             },
-          )
+          ),
+          GoRoute(path: 'productDetails', builder: (context, state) {
+            return const ProductDetailScreen();
+          },)
         ],
         path: '/',
         builder: (context, state) {

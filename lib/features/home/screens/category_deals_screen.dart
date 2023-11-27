@@ -1,9 +1,11 @@
 import 'package:amazon_clone/common/widgets/loader.dart';
 import 'package:amazon_clone/features/home/providers/category_provider.dart';
+import 'package:amazon_clone/features/product_details/providers/product_detail_provider.dart';
 import 'package:amazon_clone/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../providers/category_product_provider.dart';
 
@@ -71,7 +73,10 @@ class _CategoryDealsScreenState extends ConsumerState<CategoryDealsScreen> {
                       final currentProduct = product[index];
 
                       return GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          ref.read(productDetailProvider.notifier).selectedProduct(currentProduct);
+                          context.push('/productDetails');
+                        },
                         child: Column(
                           children: [
                             SizedBox(

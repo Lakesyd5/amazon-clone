@@ -21,7 +21,6 @@ class SearchScreen extends ConsumerWidget {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: AppBar(
-          automaticallyImplyLeading: false,
           flexibleSpace: Container(
             decoration:
                 const BoxDecoration(gradient: GlobalVariables.appBarGradient),
