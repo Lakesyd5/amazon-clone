@@ -25,7 +25,7 @@ class _MainAppState extends ConsumerState<MainApp> {
   @override
   void initState() {
     super.initState();
-    authService.getUserData(context);
+    authService.getUserData(ref);
   }
 
   @override

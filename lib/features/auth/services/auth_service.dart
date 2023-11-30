@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:amazon_clone/provider/user_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:amazon_clone/constants/error_handling.dart';
@@ -83,7 +84,7 @@ class AuthService {
 
   //  Get userData
   void getUserData(
-    ref,
+    WidgetRef ref,
   ) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();

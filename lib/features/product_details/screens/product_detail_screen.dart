@@ -2,7 +2,9 @@ import 'package:amazon_clone/common/widgets/custom_button.dart';
 import 'package:amazon_clone/common/widgets/stars.dart';
 import 'package:amazon_clone/constants/global_variable.dart';
 import 'package:amazon_clone/features/product_details/providers/product_detail_provider.dart';
+import 'package:amazon_clone/features/product_details/services/product_detail_services.dart';
 import 'package:amazon_clone/features/search/providers/search_provider.dart';
+import 'package:amazon_clone/provider/user_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -18,9 +20,29 @@ class ProductDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
+  final ProductDetailServices productDetailServices = ProductDetailServices();
+  double avgRating = 0;
+  double myRating = 0;
+
   @override
   Widget build(BuildContext context) {
     final productDetail = ref.watch(productDetailProvider);
+
+    double totalRating = 0;
+
+    if (productDetail.rating != null) {
+      for (int i = 0; i < productDetail.rating!.length; i++) {
+        totalRating += productDetail.rating![i].rating;
+        if (productDetail.rating![i].userId == ref.read(userProvider).id) {
+          myRating = productDetail.rating![i].rating;
+        }
+      }
+    }
+
+    if (totalRating != 0) {
+      avgRating = totalRating / productDetail.rating!.length;
+    }
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -108,8 +130,8 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                   Text(
                     productDetail.id ?? '',
                   ),
-                  const Stars(
-                    rating: 0,
+                  Stars(
+                    rating: avgRating,
                   ),
                 ],
               ),
@@ -130,7 +152,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
               items: productDetail.images.map(
                 (i) {
                   return Builder(
-                    builder: (BuildContext context) => Image.network(
+                    builder: (_) => Image.network(
                       i,
                       fit: BoxFit.contain,
                       height: 200,
@@ -190,7 +212,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
               padding: const EdgeInsets.all(10),
               child: CustomButton(
                 text: 'Add to Cart',
-                onTap: (){},
+                onTap: () {},
                 color: const Color.fromRGBO(254, 216, 19, 1),
               ),
             ),
@@ -210,7 +232,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
               ),
             ),
             RatingBar.builder(
-              initialRating: 0,
+              initialRating: myRating,
               minRating: 1,
               direction: Axis.horizontal,
               allowHalfRating: true,
@@ -220,7 +242,13 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                 Icons.star,
                 color: GlobalVariables.secondaryColor,
               ),
-              onRatingUpdate: (rating) {},
+              onRatingUpdate: (rating) {
+                productDetailServices.rateProduct(
+                  ref: ref,
+                  product: productDetail,
+                  rating: rating,
+                );
+              },
             )
           ],
         ),
